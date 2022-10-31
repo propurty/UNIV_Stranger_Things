@@ -1,15 +1,28 @@
 import React from "react";
 import PostItem from "./PostItem";
-
+import { Link } from "react-router-dom";
+import "./Posts.css";
+// FIXME - !!!!!!!!
+// TODO - { , setPost, token } as props.
 const Posts = ({ post }) => {
-  console.log("Posts", post);
-
   return (
-    <div>
-      {post.map((item) => {
-        return <PostItem key={item._id} post={post} />;
-      })}
-    </div>
+    <>
+      <Link to='/posts/create' className='ui-button'>
+        Create Post
+      </Link>
+      <div className='posts-container'>
+        {post.map((item) => {
+          return (
+            <PostItem
+              key={item._id}
+              post={item}
+              // setPost={setPost}
+              // token={token}
+            />
+          );
+        })}
+      </div>
+    </>
   );
 };
 

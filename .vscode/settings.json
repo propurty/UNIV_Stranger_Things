@@ -1,7 +1,7 @@
 {
   "workbench.colorCustomizations": {
-    "titleBar.activeBackground": "#1e0d0c",
-    "titleBar.inactiveBackground": "#1e0d0c99"
+    "titleBar.activeBackground": "#1d030a",
+    "titleBar.inactiveBackground": "#1d030a99"
   },
-  "peacock.remoteColor": "#1e0d0c"
+  "peacock.remoteColor": "#1d030a"
 }
