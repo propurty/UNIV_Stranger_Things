@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 // import {deletePost} from '../api/api';
 
+// REVIEW - Does deletePost need to set active to false.
 // TODO - { , setPost, token } as props.
 const PostItem = ({ post }) => {
   // REVIEW - delete handler and postID as prop.
@@ -12,17 +13,33 @@ const PostItem = ({ post }) => {
   // };
 
   //TODO - Add delete button ICON trashcan. Map message array.
+
+  //NOTE - large do anything? I added it.
   return (
-    <div className='ui card'>
+    <div className='ui large card'>
       <div className='content'>
         {post.isAuthor ? (
           <div className='right floated aligned tiny header'>You</div>
         ) : null}
         <div className='centered aligned header'>{post.title}</div>
+        {/* <div className='right aligned tiny header'>{post.createdAt}</div> Date is too specific. */}
         <div className='centered aligned description'>
           <p>{post.description}</p>
+          <br></br>
           <div className='extra content'>
-            <div className='left floated aligned header'>{post.location}</div>
+            <div className='left floated aligned header'>
+              {"Sold by: " + post.author.username}
+            </div>
+            <br></br>
+            <div className='left floated aligned header'>
+              {"Location: " + post.location}
+            </div>
+            <div className='right floated aligned header'>{post.price}</div>
+            <br></br>
+            <div className='left floated aligned header'>
+              {post.willDeliver ? "Ships: Yes" : "Ships: No"}
+            </div>
+
             <div className='right floated aligned header'>
               <Link to=''>View Info</Link>
             </div>
