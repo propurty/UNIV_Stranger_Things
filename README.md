@@ -1,6 +1,8 @@
 # Stranger's Things
 
-Building A Front-End, now with CRUD
+FYI - I am using a few extensions in this project to help me keep organized. Like comment anchors.
+
+Building A Front-End, now with CRUD.
 We are going to be consuming another API, which is hosted at Stranger's Things API.
 
 This project allows us to do more than request data, it also allows us to create data. In order to do this we will have to learn about CRUD (an acronym for Create, Read, Update, Destroy), how to use fetch, and about user authentication via JSON Web Tokens (JWT).

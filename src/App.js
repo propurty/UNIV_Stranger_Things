@@ -1,12 +1,18 @@
-import React, { useState, useEffect } from "react";
-import { Link, Routes, Route, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, Route, Routes, useNavigate } from "react-router-dom";
 import { fetchPosts, fetchUser } from "./api/api";
-import { Posts, Home, AccountForm, PostCreateForm } from "./components";
 import "./App.css";
+import {
+  AccountForm,
+  Home,
+  PostCreateForm,
+  PostDetail,
+  Posts,
+} from "./components";
 
-{
-  /* TODO - Replace Semantic UI className(s) and try Tailwind.css instead. */
-}
+// NOTE - An input can be type="search", see what it does.
+// REVIEW - check ui button classes for login and signup.
+// TODO - Replace Semantic UI className(s) and try Tailwind.css instead.
 
 //----------------- App -----------------
 const App = () => {
@@ -18,22 +24,37 @@ const App = () => {
   const navigate = useNavigate();
 
   //----------------- useEffect -----------------
+
+  //TODO - Remove useEffect and have just getPosts for the eventual postDetail component.
+  // useEffect(() => {
+  //   const getPosts = async () => {
+  //     try {
+  //       const result = await fetchPosts(token);
+  //       setPost(result);
+  //     } catch (error) {
+  //       console.error("!Error in useEffect (getPosts)!", error);
+  //     }
+  //   };
+  //   getPosts();
+  // }, [token]);
+
+  //REVIEW - Check if getPosts and the following useEffect changes are needed.
+  const getPosts = async () => {
+    try {
+      const result = await fetchPosts(token);
+      setPost(result);
+    } catch (error) {
+      console.error("!Error in getPosts!", error);
+    }
+  };
   useEffect(() => {
-    const getPosts = async () => {
-      try {
-        const result = await fetchPosts(token);
-        setPost(result);
-      } catch (error) {
-        console.error("!Error in useEffect (getPosts)!", error);
-      }
-    };
     getPosts();
   }, [token]);
 
   useEffect(() => {
     if (token) {
       const getUser = async () => {
-        const { user } = await fetchUser(token);
+        const user = await fetchUser(token);
         setUser(user);
       };
       getUser();
@@ -54,30 +75,32 @@ const App = () => {
     navigate("/");
   };
 
+  //----------------- return -----------------
   return (
     <div className='container'>
       <nav className='ui secondary menu'>
-        <Link className='item' to='/'>
+        {/* blue ui button */}
+        <Link className='active-item' to='/'>
           Home
         </Link>
-        <Link className='item' to='/posts'>
+        <Link className='blue ui button' to='/posts'>
           Posts
         </Link>
-
         <div className='right menu'>
           {token ? (
-            <button onClick={logOut} className='item'>
+            <button onClick={logOut} className='red inverted ui button'>
               Log Out
             </button>
           ) : (
-            <>
-              <Link className='item' to='/account/login'>
+            <div className='ui buttons'>
+              <Link className='green ui button' to='/account/login'>
                 Log In
               </Link>
-              <Link className='item' to='/account/register'>
+              <div>or</div>
+              <Link className='green ui button' to='/account/register'>
                 Sign Up
               </Link>
-            </>
+            </div>
           )}
         </div>
       </nav>
@@ -88,6 +111,11 @@ const App = () => {
           className='item'
           path='/posts/create'
           element={<PostCreateForm token={token} setPost={setPost} />}
+        />
+        <Route
+          className='item'
+          path='/posts/:postId'
+          element={<PostDetail token={token} post={post} getPosts={getPosts} />}
         />
         <Route
           className='item'

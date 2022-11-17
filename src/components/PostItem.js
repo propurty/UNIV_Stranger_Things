@@ -1,64 +1,58 @@
 import React from "react";
 import { Link } from "react-router-dom";
-// import {deletePost} from '../api/api';
 
-// REVIEW - Does deletePost need to set active to false.
-// TODO - { , setPost, token } as props.
-const PostItem = ({ post }) => {
-  // REVIEW - delete handler and postID as prop.
-  // const handleDelete = async (postID) => {
-  //   // NOTE - Check order of parameters to match correctly.
-  //   await deletePost(token, postID);
-  //   setPost((prevPosts) => prevPosts.filter((post) => post._id !== postID));
-  // };
-
+const PostItem = ({ post, postHeader, children }) => {
   //TODO - Add delete button ICON trashcan. Map message array.
+  //TODO - Add time to post and format it to how recent it was posted. Like, "Posted 1 day ago."
+  //REVIEW - Check if the post written by you shows an indication of it.
+  //REVIEW - Check for any additional info to add or any uselsess code to remove.
 
-  //NOTE - large do anything? I added it.
   return (
-    <div className='ui large card'>
+    <div className='ui card'>
       <div className='content'>
-        {post.isAuthor ? (
-          <div className='right floated aligned tiny header'>You</div>
-        ) : null}
-        <div className='centered aligned header'>{post.title}</div>
-        {/* <div className='right aligned tiny header'>{post.createdAt}</div> Date is too specific. */}
+        {postHeader}
+        <div className='left aligned header'>{post.title}</div>
+        {/* <div className='right aligned tiny header'>{post.createdAt}</div>
+        Date is too specific. */}
         <div className='centered aligned description'>
           <p>{post.description}</p>
           <br></br>
           <div className='extra content'>
+            <div className=''>
+              {post.location ? "Location: " + post.location : null}
+            </div>
             <div className='left floated aligned header'>
               {"Sold by: " + post.author.username}
-            </div>
-            <br></br>
-            <div className='left floated aligned header'>
-              {"Location: " + post.location}
             </div>
             <div className='right floated aligned header'>{post.price}</div>
             <br></br>
             <div className='left floated aligned header'>
               {post.willDeliver ? "Ships: Yes" : "Ships: No"}
             </div>
-
+            {children}
             <div className='right floated aligned header'>
-              <Link to=''>View Info</Link>
+              <Link
+                to={`/posts/${post._id}`}
+                className='ui blue right ribbon label'>
+                Details
+              </Link>
             </div>
           </div>
         </div>
+
         <div
           role='list'
           className='ui divided relaxed list'
-          style={{ color: "#444" }}>
-          {/* {post.isAuthor ? (
-            <button
-              className='negative ui button left floated'
-              onClick={() => handleDelete(post._id)}>
-              Remove Post
-            </button>
-          ) : null} */}
+          style={{ color: "#444", clear: "both" }}>
+          {/* REVIEW - post.message instead of messages? Test messages appearing. */}
+          {/* REVIEW - Check fromUser.username and other references. */}
           {post.messages.map((message) => {
             return (
-              <div role='listitem' className='item' key={message.fromUser._id}>
+              <div
+                role='listitem'
+                // Had tiny ui message as className.
+                className='item'
+                key={message._id}>
                 <b>{message.fromUser.username}</b>
                 <p className='content'>{message.content}</p>
               </div>

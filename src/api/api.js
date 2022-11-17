@@ -8,8 +8,6 @@ export const fetchPosts = async (token) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log("--RESPONSE--", response);
-
     const { data } = await response.json();
     return data.posts;
   } catch (error) {
@@ -32,10 +30,7 @@ export const registerUser = async (username, password) => {
         },
       }),
     });
-    console.log("--RESPONSE register--", response);
-
     const data = await response.json();
-    console.log("--DATA register--", data);
     return data;
   } catch (error) {
     console.error("!! Error registering User !!:", error);
@@ -110,21 +105,45 @@ export const createPost = async (
   }
 };
 
-/* export const deletePost = async (token, postId) => {
+// REVIEW - Check if there needs to be a response const and return of success, error, or data.
+export const deletePost = async (token, postId) => {
   try {
-    const response = await fetch(`${BASEURL}/posts/${postId}`, {
+    // const response =
+    await fetch(`${BASEURL}/posts/${postId}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
     });
-    const { data } = await response.json();
-    return data;
+    // const { data } = await response.json();
+    // return data;
   } catch (error) {
     console.error("DELETE /posts/:postId failed:", error);
   }
-}; */
+};
+
+export const createMessage = async (token, postId, content) => {
+  try {
+    const response = await fetch(`${BASEURL}/posts/${postId}/messages`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        message: {
+          content,
+        },
+      }),
+    });
+    const { data } = await response.json();
+    console.log("createMessage: " + data);
+    return data;
+  } catch (error) {
+    console.error("POST /posts/:postId/messages failed:", error);
+  }
+};
 
 //
 //

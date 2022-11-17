@@ -120,7 +120,7 @@ const PostCreateForm = ({ token, setPost }) => {
             {errorMessage ? (
               <p className='ui negative message'>{errorMessage}</p>
             ) : null}
-            <button className='ui button' type='submit'>
+            <button className='ui positive button' type='submit'>
               Create New Post
             </button>
           </div>

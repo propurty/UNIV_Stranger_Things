@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { registerUser, loginUser } from "../api/api";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { loginUser, registerUser } from "../api/api";
 
 const AccountForm = ({ setToken }) => {
   const [username, setUsername] = useState("");
@@ -8,7 +8,7 @@ const AccountForm = ({ setToken }) => {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const navigate = useNavigate();
-  const { action } = useParams();
+  const { userStatus } = useParams();
 
   // TODO - Tell the user (within the form) if the passwords don't match, if the username or
   // password are bad, and if they enter the wrong login info.
@@ -19,7 +19,7 @@ const AccountForm = ({ setToken }) => {
     event.preventDefault();
 
     const authFn =
-      action === "register" && password === confirmPassword
+      userStatus === "register" && password === confirmPassword
         ? registerUser
         : loginUser;
     const { data } = await authFn(username, password);
@@ -34,7 +34,7 @@ const AccountForm = ({ setToken }) => {
     }
   };
 
-  const title = action === "login" ? "Log In" : "Sign Up";
+  const title = userStatus === "login" ? "Log In" : "Sign Up";
 
   return (
     <form className='ui form' onSubmit={handleSubmit}>
@@ -46,8 +46,9 @@ const AccountForm = ({ setToken }) => {
           type='text'
           id='username'
           value={username}
-          required
           placeholder='Username'
+          minLength={3}
+          required
           onChange={(event) => setUsername(event.target.value)}
         />
       </div>
@@ -59,7 +60,7 @@ const AccountForm = ({ setToken }) => {
           id='password'
           value={password}
           placeholder='Password'
-          minLength='8'
+          minLength={8}
           required
           onChange={(event) => setPassword(event.target.value)}
         />
@@ -73,7 +74,7 @@ const AccountForm = ({ setToken }) => {
             id='confirmPassword'
             value={confirmPassword}
             placeholder='Confirm Password'
-            minLength='8'
+            minLength={8}
             required
             onChange={(event) => setConfirmPassword(event.target.value)}
           />
