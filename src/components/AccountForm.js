@@ -7,34 +7,35 @@ const AccountForm = ({ setToken }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const { action } = useParams();
   const navigate = useNavigate();
-  const { userStatus } = useParams();
+  console.log("action", action);
 
-  // TODO - Tell the user (within the form) if the passwords don't match, if the username or
-  // password are bad, and if they enter the wrong login info.
-  // NOTE - Message exists inside data.message.
-  // TODO - Maybe change to the cleaner api which destructures the object.
+  // TODO - Tell the user (within the form) if the passwords don't match, if the username or password are bad, and if they enter the wrong login info.
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const authFn =
-      userStatus === "register" && password === confirmPassword
-        ? registerUser
-        : loginUser;
-    const { data } = await authFn(username, password);
-    setToken(data.token);
-    if (data.token) {
-      navigate("/");
-    } else {
-      //NOTE - Maybe add a message to the user that the passwords don't match.
-      //REVIEW - Is navigate("/account/register") the correct thing to do?
-      navigate("/account/register");
-      console.log("Passwords do not match");
+    try {
+      const authFn =
+        action === "register" && password === confirmPassword
+          ? registerUser
+          : loginUser;
+      const data = await authFn(username, password);
+      setToken(data);
+      if (data) {
+        navigate("/");
+      } else {
+        //NOTE - Maybe add a message to the user that the passwords don't match.
+        navigate("/account/register");
+        console.log("data.message", data);
+      }
+    } catch (error) {
+      console.error("!Error handleSubmit (AccountForm)!", error);
     }
   };
 
-  const title = userStatus === "login" ? "Log In" : "Sign Up";
+  const title = action === "login" ? "Log In" : "Sign Up";
 
   return (
     <form className='ui form' onSubmit={handleSubmit}>
@@ -49,6 +50,7 @@ const AccountForm = ({ setToken }) => {
           placeholder='Username'
           minLength={3}
           required
+          autoComplete='off'
           onChange={(event) => setUsername(event.target.value)}
         />
       </div>
@@ -62,6 +64,7 @@ const AccountForm = ({ setToken }) => {
           placeholder='Password'
           minLength={8}
           required
+          autoComplete='off'
           onChange={(event) => setPassword(event.target.value)}
         />
       </div>
@@ -76,6 +79,7 @@ const AccountForm = ({ setToken }) => {
             placeholder='Confirm Password'
             minLength={8}
             required
+            autoComplete='off'
             onChange={(event) => setConfirmPassword(event.target.value)}
           />
         </div>

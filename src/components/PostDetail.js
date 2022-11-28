@@ -8,9 +8,8 @@ const PostDetail = ({ token, post, getPosts }) => {
   const [errorMessage, setErrorMessage] = useState(null);
   const { postId } = useParams();
 
-  //REVIEW - Should it be == or ===?
   const singlePost = post.find((singlePostItem) => {
-    const foundPost = singlePostItem._id == postId;
+    const foundPost = singlePostItem._id === postId;
     return foundPost;
   });
 
@@ -18,7 +17,9 @@ const PostDetail = ({ token, post, getPosts }) => {
     event.preventDefault();
 
     const result = await createMessage(token, postId, postMessage);
-    console.log("createMessage: " + result);
+
+    console.log("createMessage: ", result);
+
     if (result.message) {
       // If the message was created successfully, then we update the post.
       setPostMessage("");
@@ -35,30 +36,32 @@ const PostDetail = ({ token, post, getPosts }) => {
     return <h2>Loading...</h2>;
   }
 
-  //TODO - Add classname for button and style it.
   return (
     <>
       <PostItem post={singlePost} />
-      <form className='ui card' onSubmit={handleSubmit}>
-        <div className='field'>
-          <input
-            type='text'
-            name='postMessage'
-            value={postMessage}
-            placeholder='Add a comment...'
-            className=''
-            onChange={(event) => setPostMessage(event.target.value)}
-          />
-          <button className='positive ui button right floated' type='submit'>
-            Submit
-          </button>
-          {errorMessage && (
-            <p style={{ color: "red", backgroundColor: "pink" }}>
-              Error: {errorMessage}
-            </p>
-          )}
-        </div>
-      </form>
+      {!singlePost.isAuthor ? (
+        <form className='ui card' onSubmit={handleSubmit}>
+          <div className=''>
+            <input
+              type='text'
+              name='postMessage'
+              value={postMessage}
+              placeholder='Add a comment...'
+              className='ui input'
+              autoComplete='off'
+              onChange={(event) => setPostMessage(event.target.value)}
+            />
+            <button className='positive ui button right floated' type='submit'>
+              Submit
+            </button>
+            {errorMessage && (
+              <p style={{ color: "red", backgroundColor: "pink" }}>
+                Error: {errorMessage}
+              </p>
+            )}
+          </div>
+        </form>
+      ) : null}
     </>
   );
 };

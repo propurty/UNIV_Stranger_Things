@@ -2,9 +2,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createPost } from "../api/api";
 
-// TODO - Make a form to create a new post. Requires title, description, price, location, and
-// willDeliver to be sent to the api via post method. Requires a token to authenticate.
-
 const PostCreateForm = ({ token, setPost }) => {
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
@@ -16,8 +13,6 @@ const PostCreateForm = ({ token, setPost }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    // REVIEW - Is try catch needed here?
     try {
       const result = await createPost(
         token,

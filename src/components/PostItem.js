@@ -1,60 +1,105 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const PostItem = ({ post, postHeader, children }) => {
-  //TODO - Add delete button ICON trashcan. Map message array.
   //TODO - Add time to post and format it to how recent it was posted. Like, "Posted 1 day ago."
-  //REVIEW - Check if the post written by you shows an indication of it.
-  //REVIEW - Check for any additional info to add or any uselsess code to remove.
 
   return (
-    <div className='ui card'>
+    <div className='ui fluid card' id='postCard'>
+      {/* <div className='ui top inverted attached block header'> */}
+
+      <div className='ui top attached inverted header'>
+        <div className='ui inverted segment' id='postCardHeader'>
+          <h3 className='ui center aligned header' id='postTitle'>
+            {post.title}
+            {postHeader}
+          </h3>
+        </div>
+      </div>
+
       <div className='content'>
-        {postHeader}
-        <div className='left aligned header'>{post.title}</div>
         {/* <div className='right aligned tiny header'>{post.createdAt}</div>
-        Date is too specific. */}
+        // Note - Date is too specific. Might want to install package to easily show time? */}
         <div className='centered aligned description'>
-          <p>{post.description}</p>
-          <br></br>
-          <div className='extra content'>
-            <div className=''>
-              {post.location ? "Location: " + post.location : null}
-            </div>
-            <div className='left floated aligned header'>
-              {"Sold by: " + post.author.username}
-            </div>
-            <div className='right floated aligned header'>{post.price}</div>
-            <br></br>
-            <div className='left floated aligned header'>
-              {post.willDeliver ? "Ships: Yes" : "Ships: No"}
-            </div>
-            {children}
-            <div className='right floated aligned header'>
-              <Link
-                to={`/posts/${post._id}`}
-                className='ui blue right ribbon label'>
-                Details
-              </Link>
-            </div>
+          <h4 className='tiny ui horizontal divider header'>
+            <i className='tag icon'></i>
+            Description
+          </h4>
+
+          <div className='ui padded raised segment' id='descriptionSegment'>
+            <h4 className='ui center aligned header' id='description'>
+              {post.description}
+            </h4>
+          </div>
+
+          <h4 className='tiny ui horizontal fitted divider header'>
+            <i className='bar chart icon'></i>
+            Specifications
+          </h4>
+
+          <table className='small ui padded definition table'>
+            <tbody>
+              <tr>
+                <td className='three wide column'>Location:</td>
+                <td className=''>{post.location ? post.location : "---"}</td>
+              </tr>
+              <tr>
+                <td>Shipping:</td>
+                <td>{post.willDeliver ? "Yes" : "No"}</td>
+              </tr>
+              <tr>
+                <td>Seller:</td>
+                <td>{post.author.username}</td>
+              </tr>
+              <tr>
+                <td>Price:</td>
+                <td>{post.price}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className='ui hidden divider'></div>
+        <div className='ui two column grid'>
+          <div className='column'>{children}</div>
+          <div className='column'>
+            <NavLink to={`/posts/${post._id}`}>
+              {({ isActive }) => (
+                <a
+                  className={
+                    isActive ? null : "large ui blue right ribbon label"
+                  }>
+                  {isActive ? null : "Details "}
+                  {isActive ? null : (
+                    <i className='fitted angle right icon'></i>
+                  )}
+                </a>
+              )}
+            </NavLink>
           </div>
         </div>
 
+        {post.messages.length > 0 ? (
+          <h4 className=' tiny ui horizontal divider header'>
+            <i className='users icon'></i>Messages
+          </h4>
+        ) : null}
         <div
           role='list'
-          className='ui divided relaxed list'
+          className='tiny ui list'
           style={{ color: "#444", clear: "both" }}>
-          {/* REVIEW - post.message instead of messages? Test messages appearing. */}
-          {/* REVIEW - Check fromUser.username and other references. */}
           {post.messages.map((message) => {
             return (
               <div
                 role='listitem'
-                // Had tiny ui message as className.
-                className='item'
+                className='small ui message'
                 key={message._id}>
-                <b>{message.fromUser.username}</b>
-                <p className='content'>{message.content}</p>
+                <p className='tiny ui secondary inverted blue left aligned header'>
+                  {message.fromUser.username}
+                </p>
+                <p className='tiny ui left aligned raised segment'>
+                  {message.content}
+                </p>
               </div>
             );
           })}

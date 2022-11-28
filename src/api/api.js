@@ -16,7 +16,6 @@ export const fetchPosts = async (token) => {
 };
 
 export const registerUser = async (username, password) => {
-  console.log("Username and Password (registerUser):", username, password);
   try {
     const response = await fetch(`${BASEURL}/users/register`, {
       method: "POST",
@@ -30,8 +29,8 @@ export const registerUser = async (username, password) => {
         },
       }),
     });
-    const data = await response.json();
-    return data;
+    const { data } = await response.json();
+    return data.token;
   } catch (error) {
     console.error("!! Error registering User !!:", error);
   }
@@ -108,7 +107,6 @@ export const createPost = async (
 // REVIEW - Check if there needs to be a response const and return of success, error, or data.
 export const deletePost = async (token, postId) => {
   try {
-    // const response =
     await fetch(`${BASEURL}/posts/${postId}`, {
       method: "DELETE",
       headers: {
@@ -116,8 +114,6 @@ export const deletePost = async (token, postId) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    // const { data } = await response.json();
-    // return data;
   } catch (error) {
     console.error("DELETE /posts/:postId failed:", error);
   }
@@ -138,18 +134,55 @@ export const createMessage = async (token, postId, content) => {
       }),
     });
     const { data } = await response.json();
-    console.log("createMessage: " + data);
     return data;
   } catch (error) {
     console.error("POST /posts/:postId/messages failed:", error);
   }
 };
 
+// Did the api part for the edit functionality bonus.
+//Felt like doing styling etc more instead. I do know how to implement it though.
+
+//--------------------- Post edit API call ------------------------//
 //
+// export const editPost = async (
+//   token,
+//   title,
+//   description,
+//   price,
+//   location,
+//   willDeliver,
+//   postId
+// ) => {
+//   try {
+//     const response = await fetch(`${BASEURL}/posts/${postId}`, {
+//       method: "PATCH",
+//       headers: {
+//         "Content-Type": "application/json",
+//         Authorization: `Bearer ${token}`,
+//       },
+//       body: JSON.stringify({
+//         post: {
+//           title,
+//           description,
+//           price,
+//           location,
+//           willDeliver,
+//         },
+//       }),
+//     });
+//     const { data } = await response.json();
+//     return data;
+//   } catch (error) {
+//     console.error("PATCH /posts/#postId Failed:", error);
+//   }
+// };
+
+// CHUCK
+// NOTE - I didn't use these purely because it made it much harder to read imo.
+// NOTE - In the case of DRY though, I fully understand that it would be better to use these.
 //
-//
-//
-// ----------------------- Helper Functions -----------------------//
+// ----------------------- API Helper Functions -----------------------//
 //
 //
 // REVIEW - Fully implement these helper functions to reduce code duplication.
@@ -170,65 +203,6 @@ export const createMessage = async (token, postId, content) => {
 //   return headers;
 // };
 
-// //----------------- callAPI No Error Handling -----------------
+//  //----------------- callAPI No Error Handling -----------------
 
 // const callAPI = async (endpointPath, defaultOptions = {}) => {};
-
-// export const fetchPosts = async () => {
-//   try {
-//     const response = await fetch(`${BASEURL}/posts`);
-//     console.log("--RESPONSE--", response);
-//     //REVIEW destructuring the response?
-//     const { data } = await response.json();
-//     // console.log("--DATA--", data.posts);
-//     //REVIEW data.posts correct?
-//     return data.posts;
-//   } catch (error) {
-//     console.error("!!Error Fetching posts!!:", error);
-//   }
-// };
-
-// export const registerUser = async (username, password) => {
-//   console.log("Username and Password (registerUser):", username, password);
-//   try {
-//     const response = await fetch(`${BASEURL}/users/register`, {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify({
-//         user: {
-//           username,
-//           password,
-//         },
-//       }),
-//     });
-//     console.log("--RESPONSE register--", response);
-//     //REVIEW destructuring data instead, what does it change?
-//     const data = await response.json();
-//     console.log("--DATA register--", data);
-//     return data;
-//   } catch (error) {
-//     console.error("!!Error in registerUser !!:", error);
-//   }
-// };
-
-// export const fetchUser = async (token) => {
-//   try {
-//     const response = await fetch(`${BASEURL}/users/me`, {
-//       //NOTE method: "GET" is the default.
-//       //NOTE dont need '' around authorization?
-//       headers: {
-//         "Content-Type": "application/json",
-//         Authorization: `Bearer ${token}`,
-//       },
-//     });
-//     console.log("--USER RESPONSE me--", response);
-//     //REVIEW destructuring the response?
-//     const { data } = await response.json();
-//     console.log("--DATA me--", data);
-//     return data;
-//   } catch (error) {
-//     console.error("!!Error Fetching User users/me:", error);
-//   }
-// };

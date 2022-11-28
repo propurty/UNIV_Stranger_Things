@@ -8,45 +8,30 @@ import {
   PostCreateForm,
   PostDetail,
   Posts,
+  Profile,
 } from "./components";
-
-// NOTE - An input can be type="search", see what it does.
-// REVIEW - check ui button classes for login and signup.
-// TODO - Replace Semantic UI className(s) and try Tailwind.css instead.
 
 //----------------- App -----------------
 const App = () => {
   const [post, setPost] = useState([]);
-  const [user, setUser] = useState(null);
   const [token, setToken] = useState(
     window.localStorage.getItem("token") || null
   );
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
-  //----------------- useEffect -----------------
-
-  //TODO - Remove useEffect and have just getPosts for the eventual postDetail component.
-  // useEffect(() => {
-  //   const getPosts = async () => {
-  //     try {
-  //       const result = await fetchPosts(token);
-  //       setPost(result);
-  //     } catch (error) {
-  //       console.error("!Error in useEffect (getPosts)!", error);
-  //     }
-  //   };
-  //   getPosts();
-  // }, [token]);
-
-  //REVIEW - Check if getPosts and the following useEffect changes are needed.
   const getPosts = async () => {
     try {
+      console.log("Requested token for getPosts in app.js", token);
       const result = await fetchPosts(token);
+      console.log("App getPosts result:", result);
       setPost(result);
     } catch (error) {
       console.error("!Error in getPosts!", error);
     }
   };
+
+  //----------------- useEffects -----------------
   useEffect(() => {
     getPosts();
   }, [token]);
@@ -54,8 +39,8 @@ const App = () => {
   useEffect(() => {
     if (token) {
       const getUser = async () => {
-        const user = await fetchUser(token);
-        setUser(user);
+        const data = await fetchUser(token);
+        setUser(data);
       };
       getUser();
     }
@@ -78,26 +63,57 @@ const App = () => {
   //----------------- return -----------------
   return (
     <div className='container'>
-      <nav className='ui secondary menu'>
-        {/* blue ui button */}
-        <Link className='active-item' to='/'>
-          Home
-        </Link>
-        <Link className='blue ui button' to='/posts'>
-          Posts
-        </Link>
-        <div className='right menu'>
+      {location.pathname === "/posts" ? (
+        <div className='headerMast'></div>
+      ) : null}
+      <nav
+        className='fluid inverted ui borderless fixed secondary menu'
+        id='nav-bar'>
+        <div className='left menu'>
+          <Link
+            className='blue ui button'
+            to='/'
+            style={{ fontFamily: "Righteous", fontWeight: "400" }}>
+            Home
+          </Link>
+          <Link
+            className='blue ui button'
+            to='/posts'
+            style={{ fontFamily: "Righteous", fontWeight: "400" }}>
+            Posts
+          </Link>
+        </div>
+        <h2 className='ui right header item' id='navBarTitle'>
+          Stranger Things
+        </h2>
+        <div className='right menu' id='navRightButtons'>
           {token ? (
-            <button onClick={logOut} className='red inverted ui button'>
-              Log Out
-            </button>
+            <>
+              <Link
+                className='blue ui right floated button'
+                to='/profile'
+                style={{ fontFamily: "Righteous", fontWeight: "400" }}>
+                Profile
+              </Link>
+              <button
+                onClick={logOut}
+                className='red inverted ui right floated button'>
+                Log Out
+              </button>
+            </>
           ) : (
             <div className='ui buttons'>
-              <Link className='green ui button' to='/account/login'>
+              <Link
+                className='green ui button'
+                to='/account/login'
+                style={{ fontFamily: "Righteous", fontWeight: "400" }}>
                 Log In
               </Link>
-              <div>or</div>
-              <Link className='green ui button' to='/account/register'>
+              <div className='or'></div>
+              <Link
+                className='green ui button'
+                to='/account/register'
+                style={{ fontFamily: "Righteous", fontWeight: "400" }}>
                 Sign Up
               </Link>
             </div>
@@ -106,7 +122,7 @@ const App = () => {
       </nav>
 
       <Routes>
-        <Route path='/' element={<Home user={user} />} />
+        <Route path='/' element={<Home token={token} user={user} />} />
         <Route
           className='item'
           path='/posts/create'
@@ -115,7 +131,19 @@ const App = () => {
         <Route
           className='item'
           path='/posts/:postId'
-          element={<PostDetail token={token} post={post} getPosts={getPosts} />}
+          element={
+            <PostDetail
+              token={token}
+              post={post}
+              getPosts={getPosts}
+              isAuthor={post.isAuthor}
+            />
+          }
+        />
+        <Route
+          className='item'
+          path='/profile'
+          element={<Profile user={user} />}
         />
         <Route
           className='item'
