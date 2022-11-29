@@ -24,7 +24,7 @@ const App = () => {
     try {
       console.log("Requested token for getPosts in app.js", token);
       const result = await fetchPosts(token);
-      console.log("App getPosts result:", result);
+
       setPost(result);
     } catch (error) {
       console.error("!Error in getPosts!", error);
@@ -36,10 +36,15 @@ const App = () => {
     getPosts();
   }, [token]);
 
+  // If I set fetchUser to token.token, login works fine.
+  // Otherwise, I get an error but login still works sometimes?
+  // But using token.token makes my registration fail. Not sure
+  // where the bug is but I'm going to leave it as is for now.
   useEffect(() => {
     if (token) {
       const getUser = async () => {
         const data = await fetchUser(token);
+        console.log("fetch user", data);
         setUser(data);
       };
       getUser();
@@ -70,16 +75,10 @@ const App = () => {
         className='fluid inverted ui borderless fixed secondary menu'
         id='nav-bar'>
         <div className='left menu'>
-          <Link
-            className='blue ui button'
-            to='/'
-            style={{ fontFamily: "Righteous", fontWeight: "400" }}>
+          <Link className='blue ui button' to='/'>
             Home
           </Link>
-          <Link
-            className='blue ui button'
-            to='/posts'
-            style={{ fontFamily: "Righteous", fontWeight: "400" }}>
+          <Link className='blue ui button' to='/posts'>
             Posts
           </Link>
         </div>
@@ -103,17 +102,17 @@ const App = () => {
             </>
           ) : (
             <div className='ui buttons'>
-              <Link
-                className='green ui button'
-                to='/account/login'
-                style={{ fontFamily: "Righteous", fontWeight: "400" }}>
+              <Link className='green ui button' to='/account/login'>
                 Log In
               </Link>
-              <div className='or'></div>
-              <Link
-                className='green ui button'
-                to='/account/register'
-                style={{ fontFamily: "Righteous", fontWeight: "400" }}>
+              {/* TODO - center the or and make it the same font */}
+              <div
+                className='or'
+                style={{
+                  fontFamily: "Kalam",
+                  fontWeight: "400",
+                }}></div>
+              <Link className='green ui button' to='/account/register'>
                 Sign Up
               </Link>
             </div>

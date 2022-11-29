@@ -6,12 +6,11 @@ const AccountForm = ({ setToken }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const { action } = useParams();
   const navigate = useNavigate();
   console.log("action", action);
-
-  // TODO - Tell the user (within the form) if the passwords don't match, if the username or password are bad, and if they enter the wrong login info.
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -26,9 +25,8 @@ const AccountForm = ({ setToken }) => {
       if (data) {
         navigate("/");
       } else {
-        //NOTE - Maybe add a message to the user that the passwords don't match.
-        navigate("/account/register");
-        console.log("data.message", data);
+        // navigate("/account/register");
+        setErrorMessage(true);
       }
     } catch (error) {
       console.error("!Error handleSubmit (AccountForm)!", error);
@@ -38,56 +36,85 @@ const AccountForm = ({ setToken }) => {
   const title = action === "login" ? "Log In" : "Sign Up";
 
   return (
-    <form className='ui form' onSubmit={handleSubmit}>
-      <h1>{title}</h1>
-      <div className='field'>
-        <label htmlFor='username'>Username</label>
-        <input
-          name='username'
-          type='text'
-          id='username'
-          value={username}
-          placeholder='Username'
-          minLength={3}
-          required
-          autoComplete='off'
-          onChange={(event) => setUsername(event.target.value)}
-        />
-      </div>
-      <div className='field'>
-        <label htmlFor='password'>Password</label>
-        <input
-          name='password'
-          type='password'
-          id='password'
-          value={password}
-          placeholder='Password'
-          minLength={8}
-          required
-          autoComplete='off'
-          onChange={(event) => setPassword(event.target.value)}
-        />
-      </div>
-      {title === "Sign Up" && (
-        <div className='field'>
-          <label htmlFor='confirmPassword'>Confirm Password</label>
+    <div className='ui text container'>
+      <form className='ui form' onSubmit={handleSubmit}>
+        <h1 className='ui horizontal divider header'>{title}</h1>
+
+        <div className='field' id='loginRegister'>
+          <label htmlFor='username'>Username</label>
           <input
-            name='confirmPassword'
+            name='username'
+            type='text'
+            id='username'
+            value={username}
+            placeholder='Username'
+            minLength={3}
+            required
+            autoComplete='off'
+            onChange={(event) => setUsername(event.target.value)}
+          />
+        </div>
+        <div className='field'>
+          <label htmlFor='password'>Password</label>
+          <input
+            name='password'
             type='password'
-            id='confirmPassword'
-            value={confirmPassword}
-            placeholder='Confirm Password'
+            id='password'
+            value={password}
+            placeholder='Password'
             minLength={8}
             required
             autoComplete='off'
-            onChange={(event) => setConfirmPassword(event.target.value)}
+            onChange={(event) => setPassword(event.target.value)}
           />
+          {errorMessage && (
+            <div className='ui pointing red label'>
+              <i className='warning icon'></i>
+              Please make sure your passwords match!
+            </div>
+          )}
+        </div>
+
+        {title === "Sign Up" && (
+          <div className='field'>
+            <label htmlFor='confirmPassword'>Confirm Password</label>
+            <input
+              name='confirmPassword'
+              type='password'
+              id='confirmPassword'
+              value={confirmPassword}
+              placeholder='Confirm Password'
+              minLength={8}
+              required
+              autoComplete='off'
+              onChange={(event) => setConfirmPassword(event.target.value)}
+            />
+            {errorMessage && (
+              <div className='ui pointing red label'>
+                <i className='warning icon'></i>
+                Please make sure your passwords match!
+              </div>
+            )}
+          </div>
+        )}
+        <button className='ui positive button' type='submit'>
+          {title}
+        </button>
+      </form>
+      {title === "Log In" ? (
+        <div className='ui warning message'>
+          <i className='icon help'></i>
+          Need to make an account?{" "}
+          <a href='/account/register'>Register here </a>
+          instead.
+        </div>
+      ) : (
+        <div className='ui warning message'>
+          <i className='icon help'></i>
+          Already signed up? <a href='/account/login'>Login here</a> instead.
         </div>
       )}
-      <button className='ui button' type='submit'>
-        {title}
-      </button>
-    </form>
+    </div>
   );
 };
 

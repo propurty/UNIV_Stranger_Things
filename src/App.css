@@ -7,11 +7,18 @@ body {
   line-height: 1.6;
 }
 
+button.ui.button,
+.green.ui.button,
+.blue.ui.button {
+  font-family: "Righteous", cursive;
+  font-weight: 400;
+}
+
 .container {
   max-width: 768px;
   margin: auto;
   padding: 0 20px;
-  margin-top: 5%;
+  margin-top: 100px;
 }
 
 #nav-bar {
@@ -25,6 +32,7 @@ body {
   background-color: #101010e7;
   padding-bottom: 3px;
   /* box-shadow: #1010103e 0px 3px 6px; */
+  justify-content: center;
 }
 
 #navRightButtons {
@@ -46,12 +54,7 @@ body {
   word-spacing: 5px;
   position: fixed;
   color: #fff;
-  display: flex;
   justify-content: center;
-  align-items: center;
-  text-align: center;
-  left: 25vw;
-  right: 25vw;
 }
 
 #homeSegment {
@@ -79,7 +82,12 @@ body {
   justify-content: space-evenly;
 }
 
+#postCard {
+  margin-bottom: 20px;
+}
+
 .posts-container {
+  margin-top: 100px;
   padding: 20px;
 }
 
@@ -116,7 +124,7 @@ body {
   border-radius: 20px;
 }
 
-#description {
+h4#description {
   font-size: 1.2rem;
   font-family: "Merienda", cursive;
   font-weight: 400;
@@ -191,7 +199,7 @@ input:focus {
 
 #searchOrCreate {
   margin-top: 160px;
-  margin-bottom: 300px;
+  /* margin-bottom: 300px; */
 }
 
 #searchOrCreate .button,
@@ -206,12 +214,32 @@ input:focus {
   color: #fff;
 }
 
+#createPostDivider {
+  margin-bottom: -40px;
+}
+
+div.ui.form div {
+  font-family: "Comfortaa", cursive;
+}
+
+.ui.horizontal.divider.header {
+  font-family: "Kalam", cursive;
+  font-weight: 600;
+}
+
+#loginRegister {
+  margin-top: 35px;
+}
+
+div.field label {
+  font-family: "Comfortaa", cursive;
+  font-weight: 400;
+}
+
 #postDivider {
-  position: absolute;
   color: #000;
-  left: 25vw;
-  right: 25vw;
-  top: 710px;
+  margin-top: 268px;
+  margin-bottom: -20px;
   font-family: "Kalam", cursive;
   font-weight: 600;
 }
@@ -244,15 +272,30 @@ input:focus {
   font-family: "Comfortaa", cursive;
 }
 
-@media screen and (max-width: 738px) {
-  #navBarTitle {
-    right: 27.5vw;
+@media screen and (max-width: 389px) {
+  #searchOrCreate {
+    margin-top: 124px;
+  }
+
+  div.ui.icon.action.input {
+    /* margin-left: -3px; */
+    width: 180px;
+    justify-content: center;
+  }
+
+  #postDivider {
+    margin-top: 222px;
+    margin-bottom: -20px;
   }
 }
 
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 725px) {
+  #postDivider {
+    margin-top: 232px;
+    margin-bottom: -20px;
+  }
+
   #navBarTitle {
     display: none;
-    transition: all 0.3s ease;
   }
 }

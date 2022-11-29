@@ -20,11 +20,27 @@ const Profile = ({ user }) => {
   return (
     <>
       <div className='container'>
+        {user.messages.length == 0 ? (
+          <h4
+            className='ui centered dividing header'
+            style={{
+              marginTop: "8px",
+              fontSize: "1.4em",
+              fontWeight: "600",
+              fontFamily: "Kalam",
+            }}>
+            You have {user.messages.length} messages.
+          </h4>
+        ) : null}
         <div className='ui centered grid' id='profileGrid'>
           <div
             className='ui padded piled segment'
-            style={{ backgroundColor: "snow" }}>
-            {user.messages ? (
+            style={
+              user.messages.length > 0
+                ? { backgroundColor: "snow" }
+                : { display: "none" }
+            }>
+            {user.messages.length > 0 ? (
               <h4
                 className='ui horizontal divider header'
                 style={{
@@ -34,7 +50,7 @@ const Profile = ({ user }) => {
                   fontFamily: "Kalam",
                 }}>
                 <i className='users icon'></i>
-                Messages
+                {user.messages.length} Messages
               </h4>
             ) : null}
             <div role='list' className='ui cards' id='userMessageCards'>

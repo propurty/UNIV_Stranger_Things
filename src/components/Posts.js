@@ -84,7 +84,8 @@ const Posts = ({ post, setPost, token }) => {
         <i className='big arrow alternate circle up outline icon'></i>
       </button>
       <h4 className='large ui horizontal divider header' id='postDivider'>
-        <i className='users icon'></i>Messages
+        <i className='cubes icon'></i>
+        {"Stranger's Things"}
       </h4>
       <div className='posts-container' id='posts-container'>
         {filteredPosts.map((item) => {

@@ -6,6 +6,7 @@ import { createMessage } from "../api/api";
 const PostDetail = ({ token, post, getPosts }) => {
   const [postMessage, setPostMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
   const { postId } = useParams();
 
   const singlePost = post.find((singlePostItem) => {
@@ -23,12 +24,11 @@ const PostDetail = ({ token, post, getPosts }) => {
     if (result.message) {
       // If the message was created successfully, then we update the post.
       setPostMessage("");
-      console.log("We added a comment");
+      setSuccessMessage(true);
       // Get all posts to update the post with the new message.
       await getPosts();
     } else {
       setErrorMessage(result.error);
-      console.log("Comment not created");
     }
   };
 
@@ -38,30 +38,38 @@ const PostDetail = ({ token, post, getPosts }) => {
 
   return (
     <>
-      <PostItem post={singlePost} />
-      {!singlePost.isAuthor ? (
-        <form className='ui card' onSubmit={handleSubmit}>
-          <div className=''>
-            <input
-              type='text'
-              name='postMessage'
-              value={postMessage}
-              placeholder='Add a comment...'
-              className='ui input'
-              autoComplete='off'
-              onChange={(event) => setPostMessage(event.target.value)}
-            />
-            <button className='positive ui button right floated' type='submit'>
-              Submit
-            </button>
-            {errorMessage && (
-              <p style={{ color: "red", backgroundColor: "pink" }}>
-                Error: {errorMessage}
-              </p>
-            )}
-          </div>
-        </form>
-      ) : null}
+      <div className='ui container'>
+        <PostItem post={singlePost} />
+        {!singlePost.isAuthor && token ? (
+          <form className='ui form' onSubmit={handleSubmit}>
+            <div className='inline fields'>
+              <input
+                type='text'
+                name='postMessage'
+                value={postMessage}
+                placeholder='Add a comment...'
+                className='ui input'
+                autoComplete='off'
+                onChange={(event) => setPostMessage(event.target.value)}
+              />
+              <button className='positive ui submit button' type='submit'>
+                Submit
+              </button>
+              {successMessage && (
+                <div className='ui pointing green label'>
+                  <i className='check icon'></i>
+                  Message sent!
+                </div>
+              )}
+              {errorMessage && (
+                <p style={{ color: "red", backgroundColor: "pink" }}>
+                  Error: {errorMessage}
+                </p>
+              )}
+            </div>
+          </form>
+        ) : null}
+      </div>
     </>
   );
 };
