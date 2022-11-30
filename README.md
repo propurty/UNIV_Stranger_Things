@@ -1,6 +1,6 @@
 # Stranger's Things
 
-FYI - I am using a few extensions in this project to help me keep organized. Like comment anchors.
+FYI - I am using a few extensions in this project to help me keep organized. Like Better Comments among others.
 
 Building A Front-End, now with CRUD.
 We are going to be consuming another API, which is hosted at Stranger's Things API.
